@@ -1,4 +1,4 @@
-program perpusku;
+program Perpusku;
 
 uses
   Vcl.Forms,
