@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{A8434818-B808-460E-8A06-6B92FBC78BAD}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Source\Perpusku.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Test\PerpuskuTest.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="Perpusku">
+        <MSBuild Projects="Source\Perpusku.dproj"/>
+    </Target>
+    <Target Name="Perpusku:Clean">
+        <MSBuild Projects="Source\Perpusku.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="Perpusku:Make">
+        <MSBuild Projects="Source\Perpusku.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="PerpuskuTest">
+        <MSBuild Projects="Test\PerpuskuTest.dproj"/>
+    </Target>
+    <Target Name="PerpuskuTest:Clean">
+        <MSBuild Projects="Test\PerpuskuTest.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="PerpuskuTest:Make">
+        <MSBuild Projects="Test\PerpuskuTest.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="Perpusku;PerpuskuTest"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="Perpusku:Clean;PerpuskuTest:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="Perpusku:Make;PerpuskuTest:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
