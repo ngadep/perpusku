@@ -71,3 +71,4 @@ Compile/
 
 # Additional File
 *.log
+dunitx-results.xml
