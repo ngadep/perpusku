@@ -101,13 +101,15 @@ type
     FTanggalPinjam: TDateTime;
     FTempo: Integer;
     FTanggalKembali: Nullable<TDateTime>;
-    FDendaPerHari: Currency;
+    FDendaPerHari: Integer;
   private
     function GetJatuhTempo: TDate;
-    function GetDenda: Currency;
+    function GetDenda: Integer;
   public
+    constructor Create(AId: Integer; ATanggalPinjam: TDateTime;
+      ATempo: Integer; ATanggalKembali: Nullable<TDateTime>; ADendaPerHari: Integer); overload;
     constructor Create(AAnggota: TAnggota; ABuku: TBuku; ATanggalPinjam: TDateTime;
-      ATempo: Integer; ADendaPerHari: Currency);
+      ATempo: Integer; ADendaPerHari: Integer); overload;
     property Id: Integer read FId write FId;
     property Anggota: TAnggota read FAnggota write FAnggota;
     property Buku: TBuku read FBuku write FBuku;
@@ -115,8 +117,8 @@ type
     property Tempo: Integer read FTempo write FTempo;
     property JatuhTempo: TDate read GetJatuhTempo;
     property TanggalKembali: Nullable<TDateTime> read FTanggalKembali write FTanggalKembali;
-    property DendaPerHari: Currency read FDendaPerHari write FDendaPerHari;
-    property Denda: Currency read GetDenda;
+    property DendaPerHari: Integer read FDendaPerHari write FDendaPerHari;
+    property Denda: Integer read GetDenda;
   end;
 
 implementation
@@ -124,7 +126,7 @@ implementation
 { TPinjam }
 
 constructor TPinjam.Create(AAnggota: TAnggota; ABuku: TBuku;
-  ATanggalPinjam: TDateTime; ATempo: Integer; ADendaPerHari: Currency);
+  ATanggalPinjam: TDateTime; ATempo: Integer; ADendaPerHari: Integer);
 begin
   FAnggota := AAnggota;
   FBuku := ABuku;
@@ -133,7 +135,18 @@ begin
   FDendaPerHari := ADendaPerHari;
 end;
 
-function TPinjam.GetDenda: Currency;
+constructor TPinjam.Create(AId: Integer; ATanggalPinjam: TDateTime;
+  ATempo: Integer; ATanggalKembali: Nullable<TDateTime>;
+  ADendaPerHari: Integer);
+begin
+  FId := AId;
+  FTanggalPinjam:= ATanggalPinjam;
+  FTempo := ATempo;
+  FTanggalKembali := ATanggalKembali;
+  FDendaPerHari := ADendaPerHari;
+end;
+
+function TPinjam.GetDenda: Integer;
 var
   LTerlambat: Integer;
 begin
@@ -147,7 +160,7 @@ end;
 
 function TPinjam.GetJatuhTempo: TDate;
 begin
-  result:= IncDay(TanggalPinjam, Tempo);
+  result:= IncDay(TDate(TanggalPinjam), Tempo);
 end;
 
 initialization

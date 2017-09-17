@@ -11,7 +11,8 @@ uses
   DUnitX.Loggers.Console,
   DUnitX.Loggers.Xml.NUnit,
   DUnitX.TestFramework,
-  MyTestObject in 'MyTestObject.pas';
+  EntityTest in 'EntityTest.pas',
+  uEntities in '..\Source\uEntities.pas';
 
 var
   runner : ITestRunner;
