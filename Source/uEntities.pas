@@ -5,6 +5,7 @@ interface
 uses
   Aurelius.Mapping.Attributes,
   Aurelius.Types.Nullable,
+  System.SysUtils,
   System.DateUtils;
 
 type
@@ -103,6 +104,7 @@ type
     FTanggalKembali: Nullable<TDateTime>;
     FDendaPerHari: Integer;
   private
+    function DateTimeToDate(ADateTime: TDateTime): TDate;
     function GetJatuhTempo: TDate;
     function GetDenda: Integer;
   public
@@ -146,13 +148,21 @@ begin
   FDendaPerHari := ADendaPerHari;
 end;
 
+function TPinjam.DateTimeToDate(ADateTime: TDateTime): TDate;
+var
+  LYear, LMonth, LDay: Word;
+begin
+  DecodeDate(ADateTime, LYear, LMonth, LDay);
+  Result := EncodeDate(LYear, LMonth, LDay);
+end;
+
 function TPinjam.GetDenda: Integer;
 var
   LTerlambat: Integer;
 begin
   Result := 0;
 
-  LTerlambat := DaysBetween(JatuhTempo, TDate(TanggalKembali));
+  LTerlambat := DaysBetween(JatuhTempo, DateTimeToDate(TanggalKembali));
 
   if LTerlambat > 0 then
     Result := LTerlambat * DendaPerHari;
@@ -160,7 +170,7 @@ end;
 
 function TPinjam.GetJatuhTempo: TDate;
 begin
-  result:= IncDay(TDate(TanggalPinjam), Tempo);
+  result:= IncDay(DateTimeToDate(TanggalPinjam), Tempo);
 end;
 
 initialization
