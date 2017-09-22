@@ -159,8 +159,13 @@ end;
 function TPinjam.GetDenda: Integer;
 var
   LTerlambat: Integer;
+  LKembali: TDate;
 begin
   Result := 0;
+
+  if TanggalKembali.IsNull then
+    LKembali := DateTimeToDate(Now) else
+    LKembali := DateTimeToDate(TanggalKembali);
 
   LTerlambat := DaysBetween(JatuhTempo, DateTimeToDate(TanggalKembali));
 
