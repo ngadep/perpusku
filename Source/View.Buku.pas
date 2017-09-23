@@ -8,7 +8,9 @@ uses
   cxLookAndFeelPainters, cxStyles, cxCustomData, cxFilter, cxData,
   cxDataStorage, cxEdit, cxNavigator, Data.DB, cxDBData, Aurelius.Bind.Dataset,
   cxGridLevel, cxClasses, cxGridCustomView, cxGridCustomTableView,
-  cxGridTableView, cxGridDBTableView, cxGrid;
+  cxGridTableView, cxGridDBTableView, cxGrid,
+  Aurelius.Engine.ObjectManager,
+  uEntities;
 
 type
   TFrmBuku = class(TForm)
@@ -17,7 +19,41 @@ type
     Grid: TcxGrid;
     DSetDaftarBuku: TAureliusDataset;
     DsDaftarBuku: TDataSource;
+    DSetDaftarBukuId: TIntegerField;
+    DSetDaftarBukuKode: TStringField;
+    DSetDaftarBukuJudul: TStringField;
+    DSetDaftarBukuPengarang: TStringField;
+    DSetDaftarBukuPenerbit: TStringField;
+    DSetDaftarBukuTahunTerbit: TIntegerField;
+    DSetDaftarBukuTempatTerbit: TStringField;
+    DSetDaftarBukuJumlahHalaman: TIntegerField;
+    DSetDaftarBukuDimensi: TStringField;
+    DSetDaftarBukuDDC: TStringField;
+    DSetDaftarBukuISBN: TStringField;
+    DSetDaftarBukuJumlah: TIntegerField;
+    DSetDaftarBukuKategori: TStringField;
+    DSetDaftarBukuTempat: TStringField;
+    DSetDaftarBukuKeterangan: TStringField;
+    DSetDaftarBukuStok: TIntegerField;
+    ViewKode: TcxGridDBColumn;
+    ViewJudul: TcxGridDBColumn;
+    ViewPengarang: TcxGridDBColumn;
+    ViewPenerbit: TcxGridDBColumn;
+    ViewTahunTerbit: TcxGridDBColumn;
+    ViewTempatTerbit: TcxGridDBColumn;
+    ViewJumlahHalaman: TcxGridDBColumn;
+    ViewDimensi: TcxGridDBColumn;
+    ViewDDC: TcxGridDBColumn;
+    ViewISBN: TcxGridDBColumn;
+    ViewJumlah: TcxGridDBColumn;
+    ViewKategori: TcxGridDBColumn;
+    ViewTempat: TcxGridDBColumn;
+    ViewKeterangan: TcxGridDBColumn;
+    ViewStok: TcxGridDBColumn;
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
+    FManager : TObjectManager;
     { Private declarations }
   public
     { Public declarations }
@@ -30,4 +66,21 @@ implementation
 
 {$R *.dfm}
 
+uses uDm;
+
+procedure TFrmBuku.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  FManager.Free;
+end;
+
+procedure TFrmBuku.FormCreate(Sender: TObject);
+begin
+  FManager := TObjectManager.Create(Dm.Connection);
+  DSetDaftarBuku.Close;
+  DSetDaftarBuku.Manager := FManager;
+  DSetDaftarBuku.SetSourceCriteria(FManager.Find<TBuku>);
+  DSetDaftarBuku.Open;
+end;
+
 end.
+
