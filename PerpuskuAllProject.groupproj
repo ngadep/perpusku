@@ -9,6 +9,9 @@
         <Projects Include="Test\PerpuskuTest.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="Source\EntitiesBpl.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -35,14 +38,23 @@
     <Target Name="PerpuskuTest:Make">
         <MSBuild Projects="Test\PerpuskuTest.dproj" Targets="Make"/>
     </Target>
+    <Target Name="EntitiesBpl">
+        <MSBuild Projects="Source\EntitiesBpl.dproj"/>
+    </Target>
+    <Target Name="EntitiesBpl:Clean">
+        <MSBuild Projects="Source\EntitiesBpl.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="EntitiesBpl:Make">
+        <MSBuild Projects="Source\EntitiesBpl.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="Perpusku;PerpuskuTest"/>
+        <CallTarget Targets="Perpusku;PerpuskuTest;EntitiesBpl"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="Perpusku:Clean;PerpuskuTest:Clean"/>
+        <CallTarget Targets="Perpusku:Clean;PerpuskuTest:Clean;EntitiesBpl:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="Perpusku:Make;PerpuskuTest:Make"/>
+        <CallTarget Targets="Perpusku:Make;PerpuskuTest:Make;EntitiesBpl:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
