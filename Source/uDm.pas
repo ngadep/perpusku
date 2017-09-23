@@ -16,9 +16,11 @@ type
   TDm = class(TDataModule)
     procedure DataModuleCreate(Sender: TObject);
   private
-  public
+    FConnection: IDBConnection;
     class function CreateConnection: IDBConnection;
     class function CreateFactory: IDBConnectionFactory;
+  public
+    property Connection: IDBConnection read FConnection;
   end;
 
 var
@@ -57,7 +59,9 @@ var
   SchemaMessage: TSchemaMessage;
   X: TextFile;
 begin
-  DBManager := TDatabaseManager.Create(CreateConnection);
+  FConnection := CreateConnection;
+
+  DBManager := TDatabaseManager.Create(FConnection);
   try
     AssignFile(X, 'perpus.log');
     Rewrite(X);
