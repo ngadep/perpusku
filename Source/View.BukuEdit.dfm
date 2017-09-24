@@ -127,7 +127,7 @@ object FrmBukuEdit: TFrmBukuEdit
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
-    TabOrder = 0
+    TabOrder = 15
     ExplicitTop = 301
     ExplicitWidth = 457
     DesignSize = (
@@ -143,6 +143,7 @@ object FrmBukuEdit: TFrmBukuEdit
       Default = True
       ModalResult = 1
       TabOrder = 0
+      OnClick = BtnOkClick
       ExplicitLeft = 289
     end
     object BtnCancel: TButton
@@ -163,104 +164,104 @@ object FrmBukuEdit: TFrmBukuEdit
     Top = 22
     Width = 132
     Height = 21
-    TabOrder = 1
+    TabOrder = 0
   end
   object EdPengarang: TEdit
     Left = 144
     Top = 22
     Width = 375
     Height = 21
-    TabOrder = 2
+    TabOrder = 1
   end
   object EdJudul: TEdit
     Left = 8
     Top = 62
     Width = 513
     Height = 21
-    TabOrder = 3
+    TabOrder = 2
   end
   object EdPenerbit: TEdit
     Left = 8
     Top = 102
     Width = 297
     Height = 21
-    TabOrder = 4
+    TabOrder = 3
   end
   object EdTempatTerbit: TEdit
     Left = 311
     Top = 102
     Width = 210
     Height = 21
-    TabOrder = 5
+    TabOrder = 4
   end
   object EdTahunTerbit: TEdit
     Left = 8
     Top = 142
     Width = 73
     Height = 21
-    TabOrder = 6
+    TabOrder = 5
   end
   object EdDimensi: TEdit
     Left = 87
     Top = 142
     Width = 98
     Height = 21
-    TabOrder = 7
+    TabOrder = 6
   end
   object EdJumlahHalaman: TEdit
     Left = 191
     Top = 142
     Width = 121
     Height = 21
-    TabOrder = 8
+    TabOrder = 7
   end
   object EdKategori: TEdit
     Left = 318
     Top = 142
     Width = 203
     Height = 21
-    TabOrder = 9
+    TabOrder = 8
   end
   object EdDDC: TEdit
     Left = 8
     Top = 182
     Width = 252
     Height = 21
-    TabOrder = 10
+    TabOrder = 9
   end
   object EdISBN: TEdit
     Left = 266
     Top = 182
     Width = 255
     Height = 21
-    TabOrder = 11
+    TabOrder = 10
   end
   object EdTempatBuku: TEdit
     Left = 8
     Top = 222
     Width = 301
     Height = 21
-    TabOrder = 12
+    TabOrder = 11
   end
   object EdJumlah: TEdit
     Left = 315
     Top = 222
     Width = 100
     Height = 21
-    TabOrder = 13
+    TabOrder = 12
   end
   object EdStok: TEdit
     Left = 421
     Top = 222
     Width = 100
     Height = 21
-    TabOrder = 14
+    TabOrder = 13
   end
   object EdKeterangan: TEdit
     Left = 8
     Top = 262
     Width = 513
     Height = 21
-    TabOrder = 15
+    TabOrder = 14
   end
 end
