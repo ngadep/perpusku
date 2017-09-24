@@ -137,7 +137,12 @@ end;
 
 procedure TFrmBuku.HapusBuku(ABuku: TBuku);
 begin
-//  FManager.Remove(ABuku);
+  if MessageDlg('Yakinkah, akan menghapus data ini?...', mtConfirmation, [mbYes,
+    mbNo], 0) = mrYes then
+  begin
+    FManager.Remove(ABuku);
+    Segarkan;
+  end;
 end;
 
 procedure TFrmBuku.Segarkan;
