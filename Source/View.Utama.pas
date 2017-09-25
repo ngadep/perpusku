@@ -4,11 +4,23 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, System.Actions, Vcl.ActnList,
+  Vcl.ComCtrls;
 
 type
   TFrmUtama = class(TForm)
+    MmUtama: TMainMenu;
+    AlUtama: TActionList;
+    ActDaftarBuku: TAction;
+    M1: TMenuItem;
+    DaftarBuku1: TMenuItem;
+    PcUtama: TPageControl;
+    ActDaftarAnggota: TAction;
+    DaftarAnggota1: TMenuItem;
+    procedure ActDaftarBukuExecute(Sender: TObject);
+    procedure ActDaftarAnggotaExecute(Sender: TObject);
   private
+    procedure AddFormToPage(AForm: TForm);
     { Private declarations }
   public
     { Public declarations }
@@ -20,5 +32,38 @@ var
 implementation
 
 {$R *.dfm}
+
+uses View.Buku, View.Anggota;
+
+procedure TFrmUtama.ActDaftarAnggotaExecute(Sender: TObject);
+var
+  LForm: TFrmAnggota;
+begin
+  LForm := TFrmAnggota.Create(Application);
+  AddFormToPage(LForm);
+end;
+
+procedure TFrmUtama.ActDaftarBukuExecute(Sender: TObject);
+var
+  LForm: TFrmBuku;
+begin
+  LForm := TFrmBuku.Create(Application);
+  AddFormToPage(LForm);
+end;
+
+procedure TFrmUtama.AddFormToPage(AForm: TForm);
+var
+  LTab : TTabSheet;
+begin
+  LTab := TTabSheet.Create(PcUtama);
+  LTab.Caption := AForm.Caption;
+  LTab.PageControl := PcUtama;
+  PcUtama.ActivePage := LTab;
+
+  AForm.Parent := LTab;
+  AForm.Align := alClient;
+  AForm.BorderStyle := bsNone;
+  AForm.Show;
+end;
 
 end.
