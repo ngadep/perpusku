@@ -1,5 +1,7 @@
 inherited FrmAnggota: TFrmAnggota
   Caption = 'Daftar Anggota'
+  ExplicitWidth = 657
+  ExplicitHeight = 498
   PixelsPerInch = 96
   TextHeight = 13
   inherited Grid: TcxGrid
@@ -15,6 +17,18 @@ inherited FrmAnggota: TFrmAnggota
       object ViewJenisKelamin: TcxGridDBColumn
         Caption = 'L/P'
         DataBinding.FieldName = 'JenisKelamin'
+        PropertiesClassName = 'TcxImageComboBoxProperties'
+        Properties.Alignment.Horz = taLeftJustify
+        Properties.Items = <
+          item
+            Description = 'Laki-laki'
+            ImageIndex = 0
+            Value = 0
+          end
+          item
+            Description = 'Perempuan'
+            Value = 1
+          end>
         Width = 52
       end
       object ViewKelas: TcxGridDBColumn

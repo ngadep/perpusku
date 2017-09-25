@@ -9,7 +9,7 @@ uses
   cxData, cxDataStorage, cxEdit, cxNavigator, Data.DB, cxDBData,
   Aurelius.Bind.Dataset, cxGridLevel, cxClasses, cxGridCustomView,
   cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxGrid,
-  Vcl.StdCtrls, Vcl.ExtCtrls, uEntities;
+  Vcl.StdCtrls, Vcl.ExtCtrls, uEntities, cxImageComboBox;
 
 type
   TFrmAnggota = class(TFrmDaftarBase)
