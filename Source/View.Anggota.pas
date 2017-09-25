@@ -50,16 +50,28 @@ implementation
 
 {$R *.dfm}
 
+uses View.AnggotaEdit;
+
 { TFrmAnggota }
 
 procedure TFrmAnggota.EditDataTerpilih;
+var
+  Form : TFrmAnggotaEdit;
 begin
-  //
+  Form := TFrmAnggotaEdit.Create(Application);
+  Form.EditAnggota(DSetDaftar.Current<TAnggota>);
+
+  if Form.ShowModal = mrOk then
+  begin
+    FManager.Update(Form.Anggota);
+    FManager.Flush;
+    Segarkan;
+  end;
 end;
 
 procedure TFrmAnggota.HapusDataTerpilih;
 begin
-  //
+    FManager.Remove(DSetDaftar.Current<TAnggota>);
 end;
 
 procedure TFrmAnggota.Segarkan;
@@ -71,8 +83,16 @@ begin
 end;
 
 procedure TFrmAnggota.TambahData;
+var
+  Form : TFrmAnggotaEdit;
 begin
-  //
+  Form := TFrmAnggotaEdit.Create(Application);
+  Form.AnggotaBaru;
+  if Form.ShowModal = mrOk then
+  begin
+    FManager.Save(Form.Anggota);
+    Segarkan;
+  end;
 end;
 
 end.
