@@ -11,7 +11,8 @@ uses
   View.AnggotaEdit in 'View.AnggotaEdit.pas' {FrmAnggotaEdit},
   View.Peminjaman in 'View.Peminjaman.pas' {FrmPeminjaman},
   View.Pengembalian in 'View.Pengembalian.pas' {FrmPengembalian},
-  View.Pengaturan in 'View.Pengaturan.pas' {FrmPengaturan};
+  View.Pengaturan in 'View.Pengaturan.pas' {FrmPengaturan},
+  View.DaftarBase in 'View.DaftarBase.pas' {FrmDaftarBase};
 
 {$R *.res}
 
