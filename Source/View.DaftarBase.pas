@@ -32,12 +32,13 @@ type
     procedure BtnEditClick(Sender: TObject);
     procedure BtnHapusClick(Sender: TObject);
   private
+    { Private declarations }
+  protected
     FManager : TObjectManager;
     procedure Segarkan; virtual; abstract;
     procedure TambahData; virtual; abstract;
     procedure EditDataTerpilih; virtual; abstract;
     procedure HapusDataTerpilih; virtual; abstract;
-    { Private declarations }
   public
     { Public declarations }
   end;
@@ -55,7 +56,12 @@ end;
 
 procedure TFrmDaftarBase.BtnHapusClick(Sender: TObject);
 begin
-  HapusDataTerpilih
+  if MessageDlg('Yakinkah, akan menghapus data ini?...', mtConfirmation, [mbYes,
+    mbNo], 0) = mrYes then
+  begin
+    HapusDataTerpilih;
+    Segarkan;
+  end;
 end;
 
 procedure TFrmDaftarBase.BtnKeluarClick(Sender: TObject);
