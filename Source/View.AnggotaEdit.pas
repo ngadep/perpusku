@@ -59,7 +59,7 @@ procedure TFrmAnggotaEdit.BtnOkClick(Sender: TObject);
 begin
   FAnggota.Kode := EdKode.Text;
   FAnggota.Nama := EdNama.Text;
-  FAnggota.JenisKelamin := CbJenisKelamin.ItemIndex;
+  FAnggota.JenisKelamin := Tsex(CbJenisKelamin.ItemIndex);
   FAnggota.Kelas := EdKelas.Text;
   FAnggota.Angkatan := StrToInt(EdAngkatan.Text);
   FAnggota.Jurusan := EdJurusan.Text;
@@ -75,7 +75,7 @@ begin
 
   EdKode.Text := FAnggota.Kode;
   EdNama.Text := FAnggota.Nama;
-  CbJenisKelamin.ItemIndex := FAnggota.JenisKelamin;
+  CbJenisKelamin.ItemIndex := Ord(FAnggota.JenisKelamin);
   EdKelas.Text := FAnggota.Kelas;
   EdAngkatan.Text := IntToStr(FAnggota.Angkatan);
   EdJurusan.Text := FAnggota.Jurusan;
