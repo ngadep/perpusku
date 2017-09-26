@@ -31,6 +31,10 @@ type
     procedure BtnTambahClick(Sender: TObject);
     procedure BtnEditClick(Sender: TObject);
     procedure BtnHapusClick(Sender: TObject);
+    procedure ViewKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure ViewCellDblClick(Sender: TcxCustomGridTableView;
+      ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
+      AShift: TShiftState; var AHandled: Boolean);
   private
     { Private declarations }
   protected
@@ -89,6 +93,23 @@ procedure TFrmDaftarBase.FormCreate(Sender: TObject);
 begin
   FManager := TObjectManager.Create(Dm.Connection);
   Segarkan;
+end;
+
+procedure TFrmDaftarBase.ViewCellDblClick(Sender: TcxCustomGridTableView;
+  ACellViewInfo: TcxGridTableDataCellViewInfo; AButton: TMouseButton;
+  AShift: TShiftState; var AHandled: Boolean);
+begin
+    BtnEditClick(Sender);
+end;
+
+procedure TFrmDaftarBase.ViewKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if key = vk_return then
+    BtnEditClick(Sender);
+
+  if Key = vk_delete then
+    BtnHapusClick(Sender);
 end;
 
 end.

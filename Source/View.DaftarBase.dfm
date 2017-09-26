@@ -82,7 +82,9 @@ object FrmDaftarBase: TFrmDaftarBase
     Align = alClient
     TabOrder = 1
     object View: TcxGridDBTableView
+      OnKeyDown = ViewKeyDown
       Navigator.Buttons.CustomButtons = <>
+      OnCellDblClick = ViewCellDblClick
       DataController.DataSource = DsDaftar
       DataController.Summary.DefaultGroupSummaryItems = <>
       DataController.Summary.FooterSummaryItems = <>
