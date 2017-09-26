@@ -4,37 +4,31 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, cxGraphics, cxControls, cxLookAndFeels,
-  cxLookAndFeelPainters, cxStyles, cxCustomData, cxFilter, cxData,
-  cxDataStorage, cxEdit, cxNavigator, Data.DB, cxDBData, Aurelius.Bind.Dataset,
-  cxGridLevel, cxClasses, cxGridCustomView, cxGridCustomTableView,
-  cxGridTableView, cxGridDBTableView, cxGrid,
-  Aurelius.Engine.ObjectManager,
-  uEntities, Vcl.StdCtrls, Vcl.ExtCtrls;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, View.DaftarBase, cxGraphics, cxControls,
+  cxLookAndFeels, cxLookAndFeelPainters, cxStyles, cxCustomData, cxFilter,
+  cxData, cxDataStorage, cxEdit, cxNavigator, Data.DB, cxDBData,
+  Aurelius.Bind.Dataset, cxGridLevel, cxClasses, cxGridCustomView,
+  cxGridCustomTableView, cxGridTableView, cxGridDBTableView, cxGrid,
+  Vcl.StdCtrls, Vcl.ExtCtrls, uEntities;
 
 type
-  TFrmBuku = class(TForm)
-    View: TcxGridDBTableView;
-    Level: TcxGridLevel;
-    Grid: TcxGrid;
-    DSetDaftarBuku: TAureliusDataset;
-    DsDaftarBuku: TDataSource;
-    DSetDaftarBukuId: TIntegerField;
-    DSetDaftarBukuKode: TStringField;
-    DSetDaftarBukuJudul: TStringField;
-    DSetDaftarBukuPengarang: TStringField;
-    DSetDaftarBukuPenerbit: TStringField;
-    DSetDaftarBukuTahunTerbit: TIntegerField;
-    DSetDaftarBukuTempatTerbit: TStringField;
-    DSetDaftarBukuJumlahHalaman: TIntegerField;
-    DSetDaftarBukuDimensi: TStringField;
-    DSetDaftarBukuDDC: TStringField;
-    DSetDaftarBukuISBN: TStringField;
-    DSetDaftarBukuJumlah: TIntegerField;
-    DSetDaftarBukuKategori: TStringField;
-    DSetDaftarBukuTempat: TStringField;
-    DSetDaftarBukuKeterangan: TStringField;
-    DSetDaftarBukuStok: TIntegerField;
+  TFrmBuku = class(TFrmDaftarBase)
+    DSetDaftarId: TIntegerField;
+    DSetDaftarKode: TStringField;
+    DSetDaftarJudul: TStringField;
+    DSetDaftarPengarang: TStringField;
+    DSetDaftarPenerbit: TStringField;
+    DSetDaftarTahunTerbit: TIntegerField;
+    DSetDaftarTempatTerbit: TStringField;
+    DSetDaftarJumlahHalaman: TIntegerField;
+    DSetDaftarDimensi: TStringField;
+    DSetDaftarDDC: TStringField;
+    DSetDaftarISBN: TStringField;
+    DSetDaftarJumlah: TIntegerField;
+    DSetDaftarKategori: TStringField;
+    DSetDaftarTempat: TStringField;
+    DSetDaftarKeterangan: TStringField;
+    DSetDaftarStok: TIntegerField;
     ViewKode: TcxGridDBColumn;
     ViewJudul: TcxGridDBColumn;
     ViewPengarang: TcxGridDBColumn;
@@ -50,26 +44,13 @@ type
     ViewTempat: TcxGridDBColumn;
     ViewKeterangan: TcxGridDBColumn;
     ViewStok: TcxGridDBColumn;
-    PnlSide: TPanel;
-    BtnKeluar: TButton;
-    BtnRefresh: TButton;
-    BtnTambah: TButton;
-    BtnEdit: TButton;
-    BtnHapus: TButton;
-    procedure FormCreate(Sender: TObject);
-    procedure BtnKeluarClick(Sender: TObject);
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure BtnRefreshClick(Sender: TObject);
-    procedure BtnTambahClick(Sender: TObject);
-    procedure BtnEditClick(Sender: TObject);
-    procedure BtnHapusClick(Sender: TObject);
   private
-    FManager : TObjectManager;
-    procedure Segarkan;
-    procedure TambahBuku;
-    procedure EditBuku(ABuku: TBuku);
-    procedure HapusBuku(ABuku: TBuku);
     { Private declarations }
+  protected
+    procedure Segarkan; override;
+    procedure TambahData; override;
+    procedure EditDataTerpilih; override;
+    procedure HapusDataTerpilih; override;
   public
     { Public declarations }
   end;
@@ -81,79 +62,37 @@ implementation
 
 {$R *.dfm}
 
-uses uDm, View.BukuEdit;
+uses View.BukuEdit;
 
-procedure TFrmBuku.BtnEditClick(Sender: TObject);
-begin
-  EditBuku(DSetDaftarBuku.Current<TBuku>);
-end;
-
-procedure TFrmBuku.BtnHapusClick(Sender: TObject);
-begin
-  HapusBuku(DSetDaftarBuku.Current<TBuku>)
-end;
-
-procedure TFrmBuku.BtnKeluarClick(Sender: TObject);
-begin
-  Close;
-end;
-
-procedure TFrmBuku.BtnRefreshClick(Sender: TObject);
-begin
-  Segarkan;
-end;
-
-procedure TFrmBuku.BtnTambahClick(Sender: TObject);
-begin
-  TambahBuku;
-end;
-
-procedure TFrmBuku.EditBuku(ABuku: TBuku);
+procedure TFrmBuku.EditDataTerpilih;
 var
   Form : TFrmBukuEdit;
 begin
   Form := TFrmBukuEdit.Create(Application);
-  Form.EditBuku(ABuku);
+  Form.EditBuku(DSetDaftar.Current<TBuku>);
 
   if Form.ShowModal = mrOk then
   begin
     FManager.Update(Form.Buku);
     FManager.Flush;
-    Segarkan;
+    DSetDaftar.Refresh;
   end;
 end;
 
-procedure TFrmBuku.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TFrmBuku.HapusDataTerpilih;
 begin
-  FManager.Free;
-  Parent.Free;
-end;
-
-procedure TFrmBuku.FormCreate(Sender: TObject);
-begin
-  FManager := TObjectManager.Create(Dm.Connection);
-  Segarkan;
-end;
-
-procedure TFrmBuku.HapusBuku(ABuku: TBuku);
-begin
-  if MessageDlg('Yakinkah, akan menghapus data ini?...', mtConfirmation, [mbYes,
-    mbNo], 0) = mrYes then
-  begin
-    FManager.Remove(ABuku);
-    Segarkan;
-  end;
+    FManager.Remove(DSetDaftar.Current<TBuku>);
 end;
 
 procedure TFrmBuku.Segarkan;
 begin
-  DSetDaftarBuku.Close;
-  DSetDaftarBuku.Manager := FManager;
-  DSetDaftarBuku.SetSourceCriteria(FManager.Find<TBuku>);
-  DSetDaftarBuku.Open;
+  DSetDaftar.Close;
+  DSetDaftar.Manager := FManager;
+  DSetDaftar.SetSourceCriteria(FManager.Find<TBuku>);
+  DSetDaftar.Open;
 end;
 
-procedure TFrmBuku.TambahBuku;
+procedure TFrmBuku.TambahData;
 var
   Form : TFrmBukuEdit;
 begin
@@ -162,7 +101,7 @@ begin
   if Form.ShowModal = mrOk then
   begin
     FManager.Save(Form.Buku);
-    Segarkan;
+    DSetDaftar.Refresh;
   end;
 end;
 
