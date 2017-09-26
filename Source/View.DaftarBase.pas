@@ -60,7 +60,7 @@ begin
     mbNo], 0) = mrYes then
   begin
     HapusDataTerpilih;
-    Segarkan;
+    DSetDaftar.Refresh;
   end;
 end;
 

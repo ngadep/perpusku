@@ -65,7 +65,7 @@ begin
   begin
     FManager.Update(Form.Anggota);
     FManager.Flush;
-    Segarkan;
+    DSetDaftar.Refresh;
   end;
 end;
 
@@ -91,7 +91,7 @@ begin
   if Form.ShowModal = mrOk then
   begin
     FManager.Save(Form.Anggota);
-    Segarkan;
+    DSetDaftar.Refresh;
   end;
 end;
 
