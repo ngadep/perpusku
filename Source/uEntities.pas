@@ -5,12 +5,16 @@ interface
 uses
   Aurelius.Mapping.Attributes,
   Aurelius.Types.Nullable,
+  Aurelius.Types.Proxy,
   System.SysUtils,
   System.DateUtils;
 
 type
   [Enumeration(TEnumMappingType.emChar, 'L,P')]
   TSex = (tsMale, tsFemale);
+
+  [Enumeration(TEnumMappingType.emInteger)]
+  TInOut = (tsIn, tsOut);
 
   [Entity, AutoMapping]
   [UniqueKey('Kode')]
@@ -94,33 +98,61 @@ type
   end;
 
   [Entity, AutoMapping]
-  TPinjam = class
+  TTransaksi = class
   strict private
     FId: Integer;
     FAnggota: TAnggota;
-    FBuku: TBuku;
+    FTanggal: TDateTime;
+    FJenis: TInOut;
+  public
+    property Id: Integer read FId write FId;
+    property Anggota: TAnggota read FAnggota write FAnggota;
+    property Tanggal: TDateTime read FTanggal write FTanggal;
+    property Jenis: TInOut read FJenis write FJenis;
+  end;
+
+  [Entity, AutoMapping]
+  TPinjam = class
+  strict private
+    FId: Integer;
+    [Association([TAssociationProp.Lazy], [])]
+    FAnggota: Proxy<TAnggota>;
+    [Association([TAssociationProp.Lazy], [])]
+    FBuku: Proxy<TBuku>;
     FTanggalPinjam: TDateTime;
     FTempo: Integer;
     FTanggalKembali: Nullable<TDateTime>;
     FDendaPerHari: Integer;
+    [Association([TAssociationProp.Lazy], [])]
+    FtransaksiIn: Proxy<TTransaksi>;
+    [Association([TAssociationProp.Lazy], [])]
+    FTransaksiOut: Proxy<TTransaksi>;
   private
     function DateTimeToDate(ADateTime: TDateTime): TDate;
     function GetJatuhTempo: TDate;
     function GetDenda: Integer;
+    function GetAnggota: TAnggota;
+    function GetBuku: TBuku;
+    function GetTransaksiIn: TTransaksi;
+    function GetTransaksiOut: TTransaksi;
+    procedure SetTransaksiIn(const Value: TTransaksi);
+    procedure SetTransaksiOut(const Value: TTransaksi);
   public
     constructor Create(AId: Integer; ATanggalPinjam: TDateTime;
       ATempo: Integer; ATanggalKembali: Nullable<TDateTime>; ADendaPerHari: Integer); overload;
     constructor Create(AAnggota: TAnggota; ABuku: TBuku; ATanggalPinjam: TDateTime;
       ATempo: Integer; ADendaPerHari: Integer); overload;
     property Id: Integer read FId write FId;
-    property Anggota: TAnggota read FAnggota write FAnggota;
-    property Buku: TBuku read FBuku write FBuku;
+    property Anggota: TAnggota read GetAnggota;
+    property Buku: TBuku read GetBuku;
     property TanggalPinjam: TDateTime read FTanggalPinjam write FTanggalPinjam;
     property Tempo: Integer read FTempo write FTempo;
     property JatuhTempo: TDate read GetJatuhTempo;
     property TanggalKembali: Nullable<TDateTime> read FTanggalKembali write FTanggalKembali;
     property DendaPerHari: Integer read FDendaPerHari write FDendaPerHari;
     property Denda: Integer read GetDenda;
+    property TransaksiIn: TTransaksi read GetTransaksiIn write SetTransaksiIn;
+    property TransaksiOut: TTransaksi read GetTransaksiOut write SetTransaksiOut;
   end;
 
 implementation
@@ -130,8 +162,8 @@ implementation
 constructor TPinjam.Create(AAnggota: TAnggota; ABuku: TBuku;
   ATanggalPinjam: TDateTime; ATempo: Integer; ADendaPerHari: Integer);
 begin
-  FAnggota := AAnggota;
-  FBuku := ABuku;
+  FAnggota.Value := AAnggota;
+  FBuku.Value := ABuku;
   FTanggalPinjam:= ATanggalPinjam;
   FTempo := ATempo;
   FDendaPerHari := ADendaPerHari;
@@ -156,6 +188,16 @@ begin
   Result := EncodeDate(LYear, LMonth, LDay);
 end;
 
+function TPinjam.GetAnggota: TAnggota;
+begin
+  FAnggota.Value;
+end;
+
+function TPinjam.GetBuku: TBuku;
+begin
+  FBuku.Value;
+end;
+
 function TPinjam.GetDenda: Integer;
 var
   LTerlambat: Integer;
@@ -174,6 +216,26 @@ end;
 function TPinjam.GetJatuhTempo: TDate;
 begin
   result:= IncDay(DateTimeToDate(TanggalPinjam), Tempo);
+end;
+
+function TPinjam.GetTransaksiIn: TTransaksi;
+begin
+  FTransaksiIn.Value;
+end;
+
+function TPinjam.GetTransaksiOut: TTransaksi;
+begin
+  FTransaksiOut.Value;
+end;
+
+procedure TPinjam.SetTransaksiIn(const Value: TTransaksi);
+begin
+  FTransaksiIn.Value := Value;
+end;
+
+procedure TPinjam.SetTransaksiOut(const Value: TTransaksi);
+begin
+  FTransaksiOut.Value := Value;
 end;
 
 initialization
