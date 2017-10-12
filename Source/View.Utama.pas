@@ -17,8 +17,15 @@ type
     PcUtama: TPageControl;
     ActDaftarAnggota: TAction;
     DaftarAnggota1: TMenuItem;
+    ActPeminjaman: TAction;
+    T1: TMenuItem;
+    Peminjaman1: TMenuItem;
+    ActPengembalian: TAction;
+    Pengembalian1: TMenuItem;
     procedure ActDaftarBukuExecute(Sender: TObject);
     procedure ActDaftarAnggotaExecute(Sender: TObject);
+    procedure ActPeminjamanExecute(Sender: TObject);
+    procedure ActPengembalianExecute(Sender: TObject);
   private
     procedure AddFormToPage(AForm: TForm);
     { Private declarations }
@@ -33,7 +40,7 @@ implementation
 
 {$R *.dfm}
 
-uses View.Buku, View.Anggota;
+uses View.Buku, View.Anggota, View.Peminjaman, View.Pengembalian;
 
 procedure TFrmUtama.ActDaftarAnggotaExecute(Sender: TObject);
 var
@@ -48,6 +55,22 @@ var
   LForm: TFrmBuku;
 begin
   LForm := TFrmBuku.Create(Application);
+  AddFormToPage(LForm);
+end;
+
+procedure TFrmUtama.ActPeminjamanExecute(Sender: TObject);
+var
+  LForm: TFrmPeminjaman;
+begin
+  LForm := TFrmPeminjaman.Create(Application);
+  AddFormToPage(LForm);
+end;
+
+procedure TFrmUtama.ActPengembalianExecute(Sender: TObject);
+var
+  LForm: TFrmPengembalian;
+begin
+  LForm := TFrmPengembalian.Create(Application);
   AddFormToPage(LForm);
 end;
 

@@ -26,6 +26,15 @@ object FrmUtama: TFrmUtama
   object MmUtama: TMainMenu
     Left = 80
     Top = 8
+    object T1: TMenuItem
+      Caption = 'Transaksi'
+      object Peminjaman1: TMenuItem
+        Action = ActPeminjaman
+      end
+      object Pengembalian1: TMenuItem
+        Action = ActPengembalian
+      end
+    end
     object M1: TMenuItem
       Caption = 'Master'
       object DaftarBuku1: TMenuItem
@@ -46,6 +55,14 @@ object FrmUtama: TFrmUtama
     object ActDaftarAnggota: TAction
       Caption = 'Daftar Anggota'
       OnExecute = ActDaftarAnggotaExecute
+    end
+    object ActPeminjaman: TAction
+      Caption = 'Peminjaman'
+      OnExecute = ActPeminjamanExecute
+    end
+    object ActPengembalian: TAction
+      Caption = 'Pengembalian'
+      OnExecute = ActPengembalianExecute
     end
   end
 end
