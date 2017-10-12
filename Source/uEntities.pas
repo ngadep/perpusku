@@ -107,6 +107,7 @@ type
     FTanggal: TDateTime;
     FJenis: TInOut;
   public
+    constructor Create(AAnggota: TAnggota; ATanggal: TDateTime; AJenis: TInOut);
     property Id: Integer read FId write FId;
     property Anggota: TAnggota read FAnggota write FAnggota;
     property Tanggal: TDateTime read FTanggal write FTanggal;
@@ -117,10 +118,8 @@ type
   TPinjam = class
   strict private
     FId: Integer;
-    [Association([TAssociationProp.Lazy], [])]
-    FAnggota: Proxy<TAnggota>;
-    [Association([TAssociationProp.Lazy], [])]
-    FBuku: Proxy<TBuku>;
+    FAnggota: TAnggota;
+    FBuku: TBuku;
     FTanggalPinjam: TDateTime;
     FTempo: Integer;
     FTanggalKembali: Nullable<TDateTime>;
@@ -133,8 +132,6 @@ type
     function DateTimeToDate(ADateTime: TDateTime): TDate;
     function GetJatuhTempo: TDate;
     function GetDenda: Integer;
-    function GetAnggota: TAnggota;
-    function GetBuku: TBuku;
     function GetTransaksiIn: TTransaksi;
     function GetTransaksiOut: TTransaksi;
     procedure SetTransaksiIn(const Value: TTransaksi);
@@ -145,8 +142,8 @@ type
     constructor Create(AAnggota: TAnggota; ABuku: TBuku; ATanggalPinjam: TDateTime;
       ATempo: Integer; ADendaPerHari: Integer); overload;
     property Id: Integer read FId write FId;
-    property Anggota: TAnggota read GetAnggota;
-    property Buku: TBuku read GetBuku;
+    property Anggota: TAnggota read FAnggota;
+    property Buku: TBuku read FBuku;
     property TanggalPinjam: TDateTime read FTanggalPinjam write FTanggalPinjam;
     property Tempo: Integer read FTempo write FTempo;
     property JatuhTempo: TDate read GetJatuhTempo;
@@ -164,8 +161,8 @@ implementation
 constructor TPinjam.Create(AAnggota: TAnggota; ABuku: TBuku;
   ATanggalPinjam: TDateTime; ATempo: Integer; ADendaPerHari: Integer);
 begin
-  FAnggota.Value := AAnggota;
-  FBuku.Value := ABuku;
+  FAnggota := AAnggota;
+  FBuku := ABuku;
   FTanggalPinjam:= ATanggalPinjam;
   FTempo := ATempo;
   FDendaPerHari := ADendaPerHari;
@@ -188,16 +185,6 @@ var
 begin
   DecodeDate(ADateTime, LYear, LMonth, LDay);
   Result := EncodeDate(LYear, LMonth, LDay);
-end;
-
-function TPinjam.GetAnggota: TAnggota;
-begin
-  FAnggota.Value;
-end;
-
-function TPinjam.GetBuku: TBuku;
-begin
-  FBuku.Value;
 end;
 
 function TPinjam.GetDenda: Integer;
@@ -238,6 +225,16 @@ end;
 procedure TPinjam.SetTransaksiOut(const Value: TTransaksi);
 begin
   FTransaksiOut.Value := Value;
+end;
+
+{ TTransaksi }
+
+constructor TTransaksi.Create(AAnggota: TAnggota; ATanggal: TDateTime;
+  AJenis: TInOut);
+begin
+  FAnggota := AAnggota;
+  FTanggal := ATanggal;
+  AJenis := AJenis;
 end;
 
 initialization
