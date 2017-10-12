@@ -1,7 +1,5 @@
 inherited FrmAnggota: TFrmAnggota
   Caption = 'Daftar Anggota'
-  ExplicitWidth = 657
-  ExplicitHeight = 498
   PixelsPerInch = 96
   TextHeight = 13
   inherited Grid: TcxGrid
@@ -50,6 +48,11 @@ inherited FrmAnggota: TFrmAnggota
       end
       object ViewTelepon: TcxGridDBColumn
         DataBinding.FieldName = 'Telepon'
+        Visible = False
+      end
+      object ViewMaxPinjam: TcxGridDBColumn
+        Caption = 'Max'
+        DataBinding.FieldName = 'MaxPinjam'
         Visible = False
       end
       object ViewKeterangan: TcxGridDBColumn
@@ -108,6 +111,11 @@ inherited FrmAnggota: TFrmAnggota
         Size = 255
       end
       item
+        Name = 'MaxPinjam'
+        Attributes = [faRequired]
+        DataType = ftInteger
+      end
+      item
         Name = 'Keterangan'
         DataType = ftString
         Size = 255
@@ -151,6 +159,10 @@ inherited FrmAnggota: TFrmAnggota
     object DSetDaftarTelepon: TStringField
       FieldName = 'Telepon'
       Size = 255
+    end
+    object DSetDaftarMaxPinjam: TIntegerField
+      FieldName = 'MaxPinjam'
+      Required = True
     end
     object DSetDaftarKeterangan: TStringField
       FieldName = 'Keterangan'

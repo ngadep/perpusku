@@ -32,6 +32,8 @@ type
     ViewAlamat: TcxGridDBColumn;
     ViewTelepon: TcxGridDBColumn;
     ViewKeterangan: TcxGridDBColumn;
+    DSetDaftarMaxPinjam: TIntegerField;
+    ViewMaxPinjam: TcxGridDBColumn;
   private
     { Private declarations }
   protected

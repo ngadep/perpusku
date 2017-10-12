@@ -29,6 +29,8 @@ type
     Label9: TLabel;
     EdKeterangan: TEdit;
     CbJenisKelamin: TComboBox;
+    EdMaxPinjam: TEdit;
+    Label10: TLabel;
     procedure BtnOkClick(Sender: TObject);
   private
     { Private declarations }
@@ -65,6 +67,7 @@ begin
   FAnggota.Jurusan := EdJurusan.Text;
   FAnggota.Telepon := EdTelepon.Text;
   FAnggota.Alamat := EdAlamat.Text;
+  FAnggota.MaxPinjam := StrToInt(EdMaxPinjam.Text);
   FAnggota.Keterangan := EdKeterangan.Text;
 end;
 
@@ -81,6 +84,7 @@ begin
   EdJurusan.Text := FAnggota.Jurusan;
   EdTelepon.Text := FAnggota.Telepon;
   EdAlamat.Text := FAnggota.Alamat;
+  EdMaxPinjam.Text := IntToStr(FAnggota.MaxPinjam);
   EdKeterangan.Text := FAnggota.Keterangan;
 end;
 

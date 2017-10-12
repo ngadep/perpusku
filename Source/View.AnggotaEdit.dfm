@@ -44,7 +44,7 @@ object FrmAnggotaEdit: TFrmAnggotaEdit
     Caption = 'Kelas'
   end
   object Label5: TLabel
-    Left = 262
+    Left = 215
     Top = 49
     Width = 46
     Height = 13
@@ -78,6 +78,13 @@ object FrmAnggotaEdit: TFrmAnggotaEdit
     Height = 13
     Caption = 'Keterangan Tambahan'
   end
+  object Label10: TLabel
+    Left = 335
+    Top = 49
+    Width = 54
+    Height = 13
+    Caption = 'Max pinjam'
+  end
   object PnlBawah: TPanel
     Left = 0
     Top = 217
@@ -85,8 +92,7 @@ object FrmAnggotaEdit: TFrmAnggotaEdit
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
-    TabOrder = 9
-    ExplicitTop = 171
+    TabOrder = 10
     DesignSize = (
       457
       37)
@@ -131,14 +137,14 @@ object FrmAnggotaEdit: TFrmAnggotaEdit
   object EdKelas: TEdit
     Left = 111
     Top = 62
-    Width = 145
+    Width = 98
     Height = 21
     TabOrder = 3
   end
   object EdAngkatan: TEdit
-    Left = 262
+    Left = 215
     Top = 62
-    Width = 187
+    Width = 114
     Height = 21
     TabOrder = 4
   end
@@ -147,28 +153,28 @@ object FrmAnggotaEdit: TFrmAnggotaEdit
     Top = 102
     Width = 248
     Height = 21
-    TabOrder = 5
+    TabOrder = 6
   end
   object EdTelepon: TEdit
     Left = 262
     Top = 102
     Width = 187
     Height = 21
-    TabOrder = 6
+    TabOrder = 7
   end
   object EdAlamat: TEdit
     Left = 8
     Top = 142
     Width = 441
     Height = 21
-    TabOrder = 7
+    TabOrder = 8
   end
   object EdKeterangan: TEdit
     Left = 8
     Top = 182
     Width = 441
     Height = 21
-    TabOrder = 8
+    TabOrder = 9
   end
   object CbJenisKelamin: TComboBox
     Left = 8
@@ -182,5 +188,12 @@ object FrmAnggotaEdit: TFrmAnggotaEdit
     Items.Strings = (
       'Laki-laki'
       'Perempuan')
+  end
+  object EdMaxPinjam: TEdit
+    Left = 335
+    Top = 62
+    Width = 114
+    Height = 21
+    TabOrder = 5
   end
 end
