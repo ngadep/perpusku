@@ -67,6 +67,8 @@ type
     LbTempo: TLabel;
     Label10: TLabel;
     LbDenda: TLabel;
+    Label7: TLabel;
+    LbTanggungan: TLabel;
     procedure EdKodeKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
     procedure BtnKeluarClick(Sender: TObject);
@@ -80,6 +82,7 @@ type
     FManager : TObjectManager;
     FAnggota: TAnggota;
     FPinjams: TList<TPinjam>;
+    FTanggungan: Integer;
     FTempo: Integer;
     FDenda: Integer;
     FPinjamDataSource: TPinjamDataSource;
@@ -198,6 +201,8 @@ begin
   LbNama.Caption := '';
   LbKelas.Caption := '';
   LbMaxPinjam.Caption := '';
+  FTanggungan := 0;
+  LbTanggungan.Caption := '';
 end;
 
 procedure TFrmPeminjaman.ClearBuku;
@@ -216,7 +221,7 @@ begin
   if Key = VK_RETURN then
   begin
     LBuku := FManager.Find<TBuku>
-      .Where(Linq['KODE'] = EdBuku.Text)
+      .Where(Linq['Kode'] = EdBuku.Text)
       .UniqueResult;
 
     EdBuku.Clear;
@@ -236,7 +241,7 @@ begin
   if Key = VK_RETURN then
   begin
     FAnggota := FManager.Find<TAnggota>
-      .Where(Linq['KODE'] = EdKode.Text)
+      .Where(Linq['Kode'] = EdKode.Text)
       .UniqueResult;
 
     if Assigned(FAnggota) then
@@ -276,7 +281,18 @@ begin
   LbKode.Caption := AAnggota.Kode;
   LbNama.Caption := AAnggota.Nama;
   LbKelas.Caption := AAnggota.Kelas.ValueOrDefault;
-  LbMaxPinjam.Caption := IntToStr(AAnggota.MaxPinjam);
+  LbMaxPinjam.Caption := IntToStr(AAnggota.MaxPinjam) + ' Buku';
+
+  FTanggungan := FManager.Find<TPinjam>
+    .Select(Linq['Id'].Count)
+    .Where(
+      (Linq['Anggota'] = AAnggota.Id) and
+      (Linq['TanggalKembali'].IsNull)
+    )
+    .UniqueValue
+    .Values[0];
+
+  LbTanggungan.Caption := IntToStr(FTanggungan) + ' Buku';
 
   EdBuku.Enabled := True;
   EdBuku.SetFocus;

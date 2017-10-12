@@ -155,6 +155,26 @@ object FrmPeminjaman: TFrmPeminjaman
       Font.Style = [fsBold]
       ParentFont = False
     end
+    object Label7: TLabel
+      Left = 392
+      Top = 52
+      Width = 60
+      Height = 13
+      Caption = 'Tanggungan'
+    end
+    object LbTanggungan: TLabel
+      Left = 392
+      Top = 67
+      Width = 101
+      Height = 19
+      Caption = 'Tanggungan'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -16
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+    end
     object EdKode: TEdit
       Left = 8
       Top = 24
