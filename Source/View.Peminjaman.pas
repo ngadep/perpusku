@@ -92,6 +92,7 @@ type
     procedure ClearBuku;
     procedure LoadAnggota(AAnggota: TAnggota);
     procedure TambahBuku(ABuku: TBuku);
+    function TidakBisaPinjam: Boolean;
     { Private declarations }
   public
     { Public declarations }
@@ -220,6 +221,12 @@ var
 begin
   if Key = VK_RETURN then
   begin
+    if TidakBisaPinjam then
+    begin
+      ShowMessage('Tidak Bisa Pinjam Karena Melebihi Maximal Peminjaman');
+      Exit;
+    end;
+
     LBuku := FManager.Find<TBuku>
       .Where(Linq['Kode'] = EdBuku.Text)
       .UniqueResult;
@@ -325,6 +332,11 @@ begin
   LPinjam := TPinjam.Create(FAnggota, ABuku, Now, FTempo, FDenda);
   FPinjams.Add(LPinjam);
   FPinjamDataSource.DataChanged;
+end;
+
+function TFrmPeminjaman.TidakBisaPinjam: Boolean;
+begin
+  Result:= FAnggota.MaxPinjam - FTanggungan - FPinjams.Count <= 0;
 end;
 
 procedure TFrmPeminjaman.TransaksiBaru;

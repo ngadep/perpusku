@@ -57,8 +57,8 @@ object FrmPeminjaman: TFrmPeminjaman
       Caption = 'Kelas'
     end
     object Label5: TLabel
-      Left = 392
-      Top = 12
+      Left = 480
+      Top = 11
       Width = 54
       Height = 13
       Caption = 'Max Pinjam'
@@ -103,8 +103,8 @@ object FrmPeminjaman: TFrmPeminjaman
       ParentFont = False
     end
     object LbMaxPinjam: TLabel
-      Left = 392
-      Top = 27
+      Left = 480
+      Top = 26
       Width = 79
       Height = 19
       Caption = 'Maximum'
@@ -156,15 +156,15 @@ object FrmPeminjaman: TFrmPeminjaman
       ParentFont = False
     end
     object Label7: TLabel
-      Left = 392
-      Top = 52
+      Left = 480
+      Top = 51
       Width = 60
       Height = 13
       Caption = 'Tanggungan'
     end
     object LbTanggungan: TLabel
-      Left = 392
-      Top = 67
+      Left = 480
+      Top = 66
       Width = 101
       Height = 19
       Caption = 'Tanggungan'
