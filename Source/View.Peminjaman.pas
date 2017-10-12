@@ -167,8 +167,10 @@ var
   LTransaksi: TTransaksi;
   LPinjam: TPinjam;
   Transaction: IDBTransaction;
+  LWaktuPinjam: TDateTime;
 begin
-  LTransaksi := TTransaksi.Create(FAnggota, Now, TInOut.tsIn);
+  LWaktuPinjam := Now;
+  LTransaksi := TTransaksi.Create(FAnggota, LWaktuPinjam, TInOut.tsIn);
 
   Transaction := FManager.Connection.BeginTransaction;
   try
@@ -180,6 +182,7 @@ begin
       FManager.Update(LPinjam.Buku);
 
       LPinjam.TransaksiIn := LTransaksi;
+      LPinjam.TanggalPinjam := LWaktuPinjam;
       FManager.Save(LPinjam);
     end;
     FManager.Flush;
