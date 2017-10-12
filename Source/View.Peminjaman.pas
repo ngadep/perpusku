@@ -218,9 +218,19 @@ procedure TFrmPeminjaman.EdBukuKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
   LBuku: TBuku;
+  LKodeBuku: string;
 begin
   if Key = VK_RETURN then
   begin
+    LKodeBuku := EdBuku.Text;
+    EdBuku.Clear;
+
+    if LKodeBuku = EmptyStr then
+    begin
+      BtnSimpan.SetFocus;
+      Exit;
+    end;
+
     if TidakBisaPinjam then
     begin
       ShowMessage('Tidak Bisa Pinjam Karena Melebihi Maximal Peminjaman');
@@ -228,10 +238,12 @@ begin
     end;
 
     LBuku := FManager.Find<TBuku>
-      .Where(Linq['Kode'] = EdBuku.Text)
+      .Where(
+        (Linq['Kode'] = LKodeBuku) or
+        (Linq['ISBN'] = LKodeBuku)
+      )
       .UniqueResult;
 
-    EdBuku.Clear;
     if Assigned(LBuku) then
     begin
       TambahBuku(LBuku);

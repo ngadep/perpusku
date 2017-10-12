@@ -211,7 +211,7 @@ object FrmPeminjaman: TFrmPeminjaman
       Width = 81
       Height = 25
       Anchors = [akTop, akRight]
-      Caption = 'Simpan'
+      Caption = '&Simpan'
       TabOrder = 0
       OnClick = BtnSimpanClick
       ExplicitLeft = 489
@@ -222,7 +222,7 @@ object FrmPeminjaman: TFrmPeminjaman
       Width = 81
       Height = 25
       Anchors = [akTop, akRight]
-      Caption = 'Keluar'
+      Caption = '&Keluar'
       TabOrder = 1
       OnClick = BtnKeluarClick
       ExplicitLeft = 576
@@ -232,7 +232,7 @@ object FrmPeminjaman: TFrmPeminjaman
       Top = 6
       Width = 75
       Height = 25
-      Caption = 'Baru'
+      Caption = '&Baru'
       TabOrder = 2
       OnClick = BtnBaruClick
     end
