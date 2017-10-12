@@ -46,7 +46,7 @@ type
     TcNo: TcxGridColumn;
     TcKode: TcxGridColumn;
     TcJudul: TcxGridColumn;
-    TcDurasi: TcxGridColumn;
+    TcTempo: TcxGridColumn;
     TcTanggalPinjam: TcxGridColumn;
     TcTanggalKembali: TcxGridColumn;
     EdKode: TEdit;
@@ -63,6 +63,10 @@ type
     LbMaxPinjam: TLabel;
     EdBuku: TEdit;
     BtnBaru: TButton;
+    Label6: TLabel;
+    LbTempo: TLabel;
+    Label10: TLabel;
+    LbDenda: TLabel;
     procedure EdKodeKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
     procedure BtnKeluarClick(Sender: TObject);
@@ -79,6 +83,7 @@ type
     FTempo: Integer;
     FDenda: Integer;
     FPinjamDataSource: TPinjamDataSource;
+    procedure LoadTempoDanDenda;
     procedure TransaksiBaru;
     procedure ClearAnggota;
     procedure ClearBuku;
@@ -133,7 +138,7 @@ begin
     IndexOfJudul:
       Result := LPinjam.Buku.Judul;
     IndexOfDurasi:
-      Result := LPinjam.Tempo;
+      Result := IntToStr(LPinjam.Tempo) + ' Hari';
     IndexOfPinjam:
       Result := LPinjam.TanggalPinjam;
     IndexOfKembali:
@@ -255,10 +260,6 @@ end;
 
 procedure TFrmPeminjaman.FormCreate(Sender: TObject);
 begin
-  // sementara FTEmpo dan FDenda Taruh Disini
-  FTempo := 7;
-  FDenda := 1000;
-
   FManager := TObjectManager.Create(Dm.Connection);
   FPinjams := TList<TPinjam>.Create;
   FPinjamDataSource := TPinjamDataSource.Create(FPinjams);
@@ -283,6 +284,16 @@ begin
   EdKode.Clear;
 end;
 
+procedure TFrmPeminjaman.LoadTempoDanDenda;
+begin
+  // sementara FTEmpo dan FDenda manual nanti load dari database.
+  FTempo := 7;
+  FDenda := 1000;
+
+  LbTempo.Caption := IntToStr(FTempo) + ' Hari';
+  LbDenda.Caption := 'Rp. ' + IntToStr(FDenda);
+end;
+
 procedure TFrmPeminjaman.TableDataControllerDataChanged(Sender: TObject);
 begin
   if Table.DataController.RecordCount > 0 then
@@ -302,6 +313,7 @@ end;
 
 procedure TFrmPeminjaman.TransaksiBaru;
 begin
+  LoadTempoDanDenda;
   ClearAnggota;
   BtnSimpan.Enabled := False;
 end;
