@@ -83,6 +83,7 @@ type
     FAngkatan: Integer;
     FAlamat: Nullable<string>;
     FTelepon: Nullable<string>;
+    FMaxPinjam: Integer;
     FKeterangan: Nullable<string>;
   public
     property Id: Integer read FId write FId;
@@ -94,6 +95,7 @@ type
     property Angkatan: Integer read FAngkatan write FAngkatan;
     property Alamat: Nullable<string> read FAlamat write FAlamat;
     property Telepon: Nullable<string> read FTelepon write FTelepon;
+    property MaxPinjam: Integer read FMaxPinjam write FMaxPinjam;
     property Keterangan: Nullable<string> read FKeterangan write FKeterangan;
   end;
 
