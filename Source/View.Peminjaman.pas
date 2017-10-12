@@ -7,9 +7,34 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, cxGraphics, cxControls,
   cxLookAndFeels, cxLookAndFeelPainters, cxStyles, cxCustomData, cxFilter,
   cxData, cxDataStorage, cxEdit, cxNavigator, cxGridCustomView,
-  cxGridCustomTableView, cxGridTableView, cxClasses, cxGridLevel, cxGrid;
+  cxGridCustomTableView, cxGridTableView, cxClasses, cxGridLevel, cxGrid,
+  Vcl.StdCtrls,
+  Generics.Collections,
+  uEntities,
+  Aurelius.Engine.ObjectManager,
+  Aurelius.Criteria.Linq, cxCalendar;
+
+const
+  IndexOfNo = 0;
+  IndexOfKode = 1;
+  IndexOfJudul = 2;
+  IndexOfDurasi = 3;
+  IndexOfPinjam = 4;
+  IndexOfKembali = 5;
 
 type
+  TPinjamDataSource = class(TcxCustomDataSource)
+  private
+    FPinjams: TList<TPinjam>;
+  protected
+    procedure DeleteRecord(ARecordHandle: TcxDataRecordHandle); override;
+    function GetRecordCount: Integer; override;
+    function GetValue(ARecordHandle: TcxDataRecordHandle;
+      AItemHandle: TcxDataItemHandle): Variant; override;
+  public
+    constructor Create(APinjams: TList<TPinjam>);
+  end;
+
   TFrmPeminjaman = class(TForm)
     PnlAtas: TPanel;
     PnlBawah: TPanel;
@@ -22,7 +47,35 @@ type
     TcDurasi: TcxGridColumn;
     TcTanggalPinjam: TcxGridColumn;
     TcTanggalKembali: TcxGridColumn;
+    EdKode: TEdit;
+    Label1: TLabel;
+    BtnSimpan: TButton;
+    BtnKeluar: TButton;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    LbKode: TLabel;
+    LbNama: TLabel;
+    LbKelas: TLabel;
+    LbMaxPinjam: TLabel;
+    EdBuku: TEdit;
+    procedure EdKodeKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
+    procedure BtnKeluarClick(Sender: TObject);
+    procedure EdBukuKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure BtnSimpanClick(Sender: TObject);
   private
+    FManager : TObjectManager;
+    FAnggota: TAnggota;
+    FPinjams: TList<TPinjam>;
+    FTempo: Integer;
+    FDenda: Integer;
+    FPinjamDataSource: TPinjamDataSource;
+    procedure ClearAnggota;
+    procedure LoadAnggota(AAnggota: TAnggota);
+    procedure TambahBuku(ABuku: TBuku);
     { Private declarations }
   public
     { Public declarations }
@@ -34,5 +87,158 @@ var
 implementation
 
 {$R *.dfm}
+
+uses uDm;
+
+{ TPinjamDataSource }
+
+constructor TPinjamDataSource.Create(APinjams: TList<TPinjam>);
+begin
+  inherited Create;
+  FPinjams := APinjams;
+end;
+
+procedure TPinjamDataSource.DeleteRecord(ARecordHandle: TcxDataRecordHandle);
+begin
+  FPinjams.Delete(Integer(ARecordHandle));
+  DataChanged;
+end;
+
+function TPinjamDataSource.GetRecordCount: Integer;
+begin
+  Result := FPinjams.Count;
+end;
+
+function TPinjamDataSource.GetValue(ARecordHandle: TcxDataRecordHandle;
+  AItemHandle: TcxDataItemHandle): Variant;
+var
+  LColumnId: Integer;
+  LPinjam: TPinjam;
+begin
+  LPinjam := FPinjams.items[Integer(ARecordHandle)];
+  LColumnId := GetDefaultItemID(Integer(AItemHandle));
+  case LColumnId of
+    IndexOfNo:
+      Result := Integer(ARecordHandle) + 1;
+    IndexOfKode:
+      Result := LPinjam.Buku.Kode;
+    IndexOfJudul:
+      Result := LPinjam.Buku.Judul;
+    IndexOfDurasi:
+      Result := LPinjam.Tempo;
+    IndexOfPinjam:
+      Result := LPinjam.TanggalPinjam;
+    IndexOfKembali:
+      Result := LPinjam.JatuhTempo;
+  end;
+end;
+
+procedure TFrmPeminjaman.BtnKeluarClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmPeminjaman.BtnSimpanClick(Sender: TObject);
+var
+  LTransaksi: TTransaksi;
+  LPinjam: TPinjam;
+begin
+  LTransaksi := TTransaksi.Create(FAnggota, Now, TInOut.tsIn);
+  FManager.Save(LTransaksi);
+
+  for LPinjam in FPinjams do
+  begin
+    LPinjam.TransaksiIn := LTransaksi;
+    FManager.Save(LPinjam);
+  end;
+
+  LTransaksi.Free;
+end;
+
+procedure TFrmPeminjaman.ClearAnggota;
+begin
+  LbKode.Caption := '';
+  LbNama.Caption := '';
+  LbKelas.Caption := '';
+  LbMaxPinjam.Caption := '';
+end;
+
+procedure TFrmPeminjaman.EdBukuKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+  LBuku: TBuku;
+begin
+  if Key = VK_RETURN then
+  begin
+    LBuku := FManager.Find<TBuku>
+      .Where(Linq['KODE'] = EdBuku.Text)
+      .UniqueResult;
+
+    if Assigned(LBuku) then
+    begin
+      TambahBuku(LBuku);
+    end else
+    begin
+      raise Exception.Create('Buku Tidak Ditemukan');
+    end;
+  end;
+end;
+
+procedure TFrmPeminjaman.EdKodeKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_RETURN then
+  begin
+    FAnggota := FManager.Find<TAnggota>
+      .Where(Linq['KODE'] = EdKode.Text)
+      .UniqueResult;
+
+    if Assigned(FAnggota) then
+    begin
+      LoadAnggota(FAnggota);
+    end else
+    begin
+      ClearAnggota;
+      raise Exception.Create('Data Siswa Tidak Ditemukan');
+    end;
+  end;
+end;
+
+procedure TFrmPeminjaman.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  FPinjamDataSource.Free;
+  FPinjams.Free;
+  FManager.Free;
+  Parent.Free;
+end;
+
+procedure TFrmPeminjaman.FormCreate(Sender: TObject);
+begin
+  // sementara FTEmpo dan FDenda Taruh Disini
+  FTempo := 7;
+  FDenda := 1000;
+
+  FManager := TObjectManager.Create(Dm.Connection);
+  FPinjams := TList<TPinjam>.Create;
+  FPinjamDataSource := TPinjamDataSource.Create(FPinjams);
+  Table.DataController.CustomDataSource := FPinjamDataSource;
+end;
+
+procedure TFrmPeminjaman.LoadAnggota(AAnggota: TAnggota);
+begin
+  LbKode.Caption := AAnggota.Kode;
+  LbNama.Caption := AAnggota.Nama;
+  LbKelas.Caption := AAnggota.Kelas.ValueOrDefault;
+  LbMaxPinjam.Caption := IntToStr(AAnggota.MaxPinjam);
+end;
+
+procedure TFrmPeminjaman.TambahBuku(ABuku: TBuku);
+var
+  LPinjam: TPinjam;
+begin
+  LPinjam := TPinjam.Create(FAnggota, ABuku, Now, FTempo, FDenda);
+  FPinjams.Add(LPinjam);
+  FPinjamDataSource.DataChanged;
+end;
 
 end.
