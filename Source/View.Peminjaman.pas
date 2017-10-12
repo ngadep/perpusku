@@ -230,6 +230,10 @@ begin
   LbNama.Caption := AAnggota.Nama;
   LbKelas.Caption := AAnggota.Kelas.ValueOrDefault;
   LbMaxPinjam.Caption := IntToStr(AAnggota.MaxPinjam);
+
+  EdBuku.SetFocus;
+  EdKode.Enabled := False;
+  EdKode.Clear;
 end;
 
 procedure TFrmPeminjaman.TambahBuku(ABuku: TBuku);
