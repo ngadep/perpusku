@@ -60,12 +60,16 @@ type
     LbKelas: TLabel;
     LbMaxPinjam: TLabel;
     EdBuku: TEdit;
+    BtnBaru: TButton;
     procedure EdKodeKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
     procedure BtnKeluarClick(Sender: TObject);
     procedure EdBukuKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure BtnSimpanClick(Sender: TObject);
+    procedure BtnBaruClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure TableDataControllerDataChanged(Sender: TObject);
   private
     FManager : TObjectManager;
     FAnggota: TAnggota;
@@ -73,7 +77,9 @@ type
     FTempo: Integer;
     FDenda: Integer;
     FPinjamDataSource: TPinjamDataSource;
+    procedure TransaksiBaru;
     procedure ClearAnggota;
+    procedure ClearBuku;
     procedure LoadAnggota(AAnggota: TAnggota);
     procedure TambahBuku(ABuku: TBuku);
     { Private declarations }
@@ -133,6 +139,13 @@ begin
   end;
 end;
 
+{ TFrmPeminjaman }
+
+procedure TFrmPeminjaman.BtnBaruClick(Sender: TObject);
+begin
+  TransaksiBaru;
+end;
+
 procedure TFrmPeminjaman.BtnKeluarClick(Sender: TObject);
 begin
   Close;
@@ -157,10 +170,22 @@ end;
 
 procedure TFrmPeminjaman.ClearAnggota;
 begin
+  ClearBuku;
+  EdKode.Enabled := True;
+  EdKode.Clear;
+  EdKode.SetFocus;
   LbKode.Caption := '';
   LbNama.Caption := '';
   LbKelas.Caption := '';
   LbMaxPinjam.Caption := '';
+end;
+
+procedure TFrmPeminjaman.ClearBuku;
+begin
+  EdBuku.Clear;
+  EdBuku.Enabled := False;
+  FPinjams.Clear;
+  FPinjamDataSource.DataChanged;
 end;
 
 procedure TFrmPeminjaman.EdBukuKeyDown(Sender: TObject; var Key: Word;
@@ -174,6 +199,7 @@ begin
       .Where(Linq['KODE'] = EdBuku.Text)
       .UniqueResult;
 
+    EdBuku.Clear;
     if Assigned(LBuku) then
     begin
       TambahBuku(LBuku);
@@ -224,6 +250,11 @@ begin
   Table.DataController.CustomDataSource := FPinjamDataSource;
 end;
 
+procedure TFrmPeminjaman.FormShow(Sender: TObject);
+begin
+  TransaksiBaru;
+end;
+
 procedure TFrmPeminjaman.LoadAnggota(AAnggota: TAnggota);
 begin
   LbKode.Caption := AAnggota.Kode;
@@ -231,9 +262,18 @@ begin
   LbKelas.Caption := AAnggota.Kelas.ValueOrDefault;
   LbMaxPinjam.Caption := IntToStr(AAnggota.MaxPinjam);
 
+  EdBuku.Enabled := True;
   EdBuku.SetFocus;
   EdKode.Enabled := False;
   EdKode.Clear;
+end;
+
+procedure TFrmPeminjaman.TableDataControllerDataChanged(Sender: TObject);
+begin
+  if Table.DataController.RecordCount > 0 then
+    BtnSimpan.Enabled := True
+  else
+    BtnSimpan.Enabled := False;
 end;
 
 procedure TFrmPeminjaman.TambahBuku(ABuku: TBuku);
@@ -243,6 +283,12 @@ begin
   LPinjam := TPinjam.Create(FAnggota, ABuku, Now, FTempo, FDenda);
   FPinjams.Add(LPinjam);
   FPinjamDataSource.DataChanged;
+end;
+
+procedure TFrmPeminjaman.TransaksiBaru;
+begin
+  ClearAnggota;
+  BtnSimpan.Enabled := False;
 end;
 
 end.

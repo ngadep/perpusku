@@ -13,6 +13,7 @@ object FrmPeminjaman: TFrmPeminjaman
   OldCreateOrder = False
   OnClose = FormClose
   OnCreate = FormCreate
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object PnlAtas: TPanel
@@ -165,6 +166,15 @@ object FrmPeminjaman: TFrmPeminjaman
       OnClick = BtnKeluarClick
       ExplicitLeft = 576
     end
+    object BtnBaru: TButton
+      Left = 8
+      Top = 6
+      Width = 75
+      Height = 25
+      Caption = 'Baru'
+      TabOrder = 2
+      OnClick = BtnBaruClick
+    end
   end
   object Grid: TcxGrid
     Left = 0
@@ -181,6 +191,7 @@ object FrmPeminjaman: TFrmPeminjaman
       DataController.Summary.DefaultGroupSummaryItems = <>
       DataController.Summary.FooterSummaryItems = <>
       DataController.Summary.SummaryGroups = <>
+      DataController.OnDataChanged = TableDataControllerDataChanged
       OptionsData.CancelOnExit = False
       OptionsData.Editing = False
       OptionsData.Inserting = False
