@@ -12,7 +12,9 @@ uses
   Generics.Collections,
   uEntities,
   Aurelius.Engine.ObjectManager,
-  Aurelius.Criteria.Linq, cxCalendar;
+  Aurelius.Criteria.Linq,
+  Aurelius.Drivers.Interfaces,
+  cxCalendar;
 
 const
   IndexOfNo = 0;
@@ -155,17 +157,26 @@ procedure TFrmPeminjaman.BtnSimpanClick(Sender: TObject);
 var
   LTransaksi: TTransaksi;
   LPinjam: TPinjam;
+  Transaction: IDBTransaction;
 begin
   LTransaksi := TTransaksi.Create(FAnggota, Now, TInOut.tsIn);
-  FManager.Save(LTransaksi);
 
-  for LPinjam in FPinjams do
-  begin
-    LPinjam.TransaksiIn := LTransaksi;
-    FManager.Save(LPinjam);
+  Transaction := FManager.Connection.BeginTransaction;
+  try
+    FManager.Save(LTransaksi);
+
+    for LPinjam in FPinjams do
+    begin
+      LPinjam.TransaksiIn := LTransaksi;
+      FManager.Save(LPinjam);
+    end;
+    Transaction.Commit;
+    ShowMessage('Transaksi Peminjaman Berhasil Disimpan...');
+    TransaksiBaru;
+  except
+    Transaction.Rollback;
+    raise;
   end;
-
-  LTransaksi.Free;
 end;
 
 procedure TFrmPeminjaman.ClearAnggota;
