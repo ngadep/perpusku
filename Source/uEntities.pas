@@ -141,6 +141,7 @@ type
       ATempo: Integer; ATanggalKembali: Nullable<TDateTime>; ADendaPerHari: Integer); overload;
     constructor Create(AAnggota: TAnggota; ABuku: TBuku; ATanggalPinjam: TDateTime;
       ATempo: Integer; ADendaPerHari: Integer); overload;
+    procedure StockOut(AQty: Integer = 1);
     property Id: Integer read FId write FId;
     property Anggota: TAnggota read FAnggota;
     property Buku: TBuku read FBuku;
@@ -225,6 +226,11 @@ end;
 procedure TPinjam.SetTransaksiOut(const Value: TTransaksi);
 begin
   FTransaksiOut.Value := Value;
+end;
+
+procedure TPinjam.StockOut(AQty: Integer);
+begin
+  Buku.Stok := Buku.Stok - AQty;
 end;
 
 { TTransaksi }

@@ -167,9 +167,13 @@ begin
 
     for LPinjam in FPinjams do
     begin
+      LPinjam.StockOut;
+      FManager.Update(LPinjam.Buku);
+
       LPinjam.TransaksiIn := LTransaksi;
       FManager.Save(LPinjam);
     end;
+    FManager.Flush;
     Transaction.Commit;
     ShowMessage('Transaksi Peminjaman Berhasil Disimpan...');
     TransaksiBaru;
