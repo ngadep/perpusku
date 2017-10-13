@@ -235,10 +235,7 @@ begin
     end;
 
     if TidakBisaPinjam then
-    begin
-      ShowMessage('Tidak Bisa Pinjam Karena Melebihi Maximal Peminjaman');
-      Exit;
-    end;
+      raise Exception.Create('Tidak Bisa Pinjam Karena Melebihi Maximal Peminjaman');
 
     LBuku := FManager.Find<TBuku>
       .Where(
@@ -343,7 +340,30 @@ end;
 procedure TFrmPeminjaman.TambahBuku(ABuku: TBuku);
 var
   LPinjam: TPinjam;
+  LPinjamCheck: TPinjam;
+  LBukuIniTerpinjam: Integer;
 begin
+  for LPinjamCheck in FPinjams do
+  begin
+    if LPinjamCheck.Buku.Id = ABuku.Id then
+    begin
+      raise Exception.Create('Buku ini Sudah Masuk Dalam Daftar Pinjam');
+    end;
+  end;
+  
+  LBukuIniTerpinjam := FManager.Find<TPinjam>
+    .Select(Linq['Id'].Count)
+    .Where(
+      (Linq['Anggota'] = FAnggota.Id) and
+      (Linq['TanggalKembali'].IsNull) and
+      (Linq['Buku'] = ABuku.Id)
+    )
+    .UniqueValue
+    .Values[0];
+
+  if (LBukuIniTerpinjam > 0) then
+    raise Exception.Create('Buku Ini Sudah Dipinjam dan Belum Dikembalikan.');
+      
   LPinjam := TPinjam.Create(FAnggota, ABuku, Now, FTempo, FDenda);
   FPinjams.Add(LPinjam);
   FPinjamDataSource.DataChanged;
