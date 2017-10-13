@@ -106,46 +106,40 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
+        <DCCReference Include="SqlMonitor.pas">
+            <Form>SqlMonitorForm</Form>
+        </DCCReference>
         <DCCReference Include="View.Utama.pas">
             <Form>FrmUtama</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="uDm.pas">
             <Form>Dm</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="uEntities.pas"/>
         <DCCReference Include="View.Buku.pas">
             <Form>FrmBuku</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="View.BukuEdit.pas">
             <Form>FrmBukuEdit</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="View.Anggota.pas">
             <Form>FrmAnggota</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="View.AnggotaEdit.pas">
             <Form>FrmAnggotaEdit</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="View.Peminjaman.pas">
             <Form>FrmPeminjaman</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="View.Pengembalian.pas">
             <Form>FrmPengembalian</Form>
         </DCCReference>
         <DCCReference Include="View.Pengaturan.pas">
             <Form>FrmPengaturan</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="View.DaftarBase.pas">
             <Form>FrmDaftarBase</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

@@ -3,9 +3,9 @@ unit View.Utama;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus, System.Actions, Vcl.ActnList,
-  Vcl.ComCtrls;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
+  {$IFDEF DEBUG} SqlMonitor, {$ENDIF} Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.Menus, System.Actions, Vcl.ActnList, Vcl.ComCtrls;
 
 type
   TFrmUtama = class(TForm)
@@ -26,6 +26,7 @@ type
     procedure ActDaftarAnggotaExecute(Sender: TObject);
     procedure ActPeminjamanExecute(Sender: TObject);
     procedure ActPengembalianExecute(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     procedure AddFormToPage(AForm: TForm);
     { Private declarations }
@@ -87,6 +88,13 @@ begin
   AForm.Align := alClient;
   AForm.BorderStyle := bsNone;
   AForm.Show;
+end;
+
+procedure TFrmUtama.FormShow(Sender: TObject);
+begin
+  {$IFDEF DEBUG}
+    TSqlMonitorForm.GetInstance.Show;
+  {$ENDIF}
 end;
 
 end.

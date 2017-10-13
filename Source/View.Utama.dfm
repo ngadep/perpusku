@@ -13,6 +13,7 @@ object FrmUtama: TFrmUtama
   Menu = MmUtama
   OldCreateOrder = False
   WindowState = wsMaximized
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object PcUtama: TPageControl

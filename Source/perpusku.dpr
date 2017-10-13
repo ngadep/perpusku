@@ -2,6 +2,9 @@ program Perpusku;
 
 uses
   Vcl.Forms,
+  {$IFDEF DEBUG}
+  SqlMonitor in 'SqlMonitor.pas' {SqlMonitorForm},
+  {$ENDIF}
   View.Utama in 'View.Utama.pas' {FrmUtama},
   uDm in 'uDm.pas' {Dm: TDataModule},
   uEntities in 'uEntities.pas',
