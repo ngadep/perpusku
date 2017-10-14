@@ -150,6 +150,14 @@ begin
   end;
 end;
 
+const
+  sTransactionSaved = 'Transaksi Peminjaman Berhasil Disimpan';
+  sCannotBorrow = 'Tidak Bisa Pinjam Karena Melebihi Maximal Peminjaman';
+  sBookNotFound = 'Buku dengan Kode/ISBN: %s Tidak dapat ditemukan';
+  sMemberNotFOund = 'Data Anggota dengan Kode: %s Tidak dapat ditemukan';
+  sBookOnList = 'Buku dengan Judul: %s' + sLineBreak + 'Sudah Ada pada Daftar';
+  sBorrowedBook = 'Buku dengan Judul: %s' + sLineBreak + 'Sudah Dipinjam oleh: %s';
+
 { TFrmPeminjaman }
 
 procedure TFrmPeminjaman.BtnBaruClick(Sender: TObject);
@@ -187,7 +195,7 @@ begin
     end;
     FManager.Flush;
     Transaction.Commit;
-    ShowMessage('Transaksi Peminjaman Berhasil Disimpan...');
+    ShowMessage(sTransactionSaved);
     TransaksiBaru;
   except
     Transaction.Rollback;
@@ -235,7 +243,7 @@ begin
     end;
 
     if TidakBisaPinjam then
-      raise Exception.Create('Tidak Bisa Pinjam Karena Melebihi Maximal Peminjaman');
+      raise Exception.Create(sCannotBorrow);
 
     LBuku := FManager.Find<TBuku>
       .Where(
@@ -249,7 +257,7 @@ begin
       TambahBuku(LBuku);
     end else
     begin
-      raise Exception.Create('Buku Tidak Ditemukan');
+      raise Exception.Create(sBookNotFOund);
     end;
   end;
 end;
@@ -269,7 +277,7 @@ begin
     end else
     begin
       ClearAnggota;
-      raise Exception.Create('Data Siswa Tidak Ditemukan');
+      raise Exception.Create(sMemberNotFOund);
     end;
   end;
 end;
@@ -347,7 +355,7 @@ begin
   begin
     if LPinjamCheck.Buku.Id = ABuku.Id then
     begin
-      raise Exception.Create('Buku ini Sudah Masuk Dalam Daftar Pinjam');
+      raise Exception.Create(Format(sBookOnList, [ABuku.Judul]));
     end;
   end;
   
@@ -362,7 +370,7 @@ begin
     .Values[0];
 
   if (LBukuIniTerpinjam > 0) then
-    raise Exception.Create('Buku Ini Sudah Dipinjam dan Belum Dikembalikan.');
+    raise Exception.Create(Format(sBorrowedBook, [ABuku.Judul, FAnggota.Nama]));
       
   LPinjam := TPinjam.Create(FAnggota, ABuku, Now, FTempo, FDenda);
   FPinjams.Add(LPinjam);

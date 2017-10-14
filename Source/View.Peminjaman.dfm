@@ -23,8 +23,6 @@ object FrmPeminjaman: TFrmPeminjaman
     Height = 177
     Align = alTop
     TabOrder = 0
-    ExplicitLeft = -8
-    ExplicitTop = -6
     DesignSize = (
       666
       177)
@@ -200,8 +198,6 @@ object FrmPeminjaman: TFrmPeminjaman
     Height = 41
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 352
-    ExplicitWidth = 543
     DesignSize = (
       666
       41)
@@ -214,7 +210,6 @@ object FrmPeminjaman: TFrmPeminjaman
       Caption = '&Simpan'
       TabOrder = 0
       OnClick = BtnSimpanClick
-      ExplicitLeft = 489
     end
     object BtnKeluar: TButton
       Left = 574
@@ -225,7 +220,6 @@ object FrmPeminjaman: TFrmPeminjaman
       Caption = '&Keluar'
       TabOrder = 1
       OnClick = BtnKeluarClick
-      ExplicitLeft = 576
     end
     object BtnBaru: TButton
       Left = 8
@@ -244,9 +238,6 @@ object FrmPeminjaman: TFrmPeminjaman
     Height = 307
     Align = alClient
     TabOrder = 2
-    ExplicitTop = 89
-    ExplicitWidth = 543
-    ExplicitHeight = 263
     object Table: TcxGridTableView
       Navigator.Buttons.CustomButtons = <>
       DataController.Summary.DefaultGroupSummaryItems = <>
