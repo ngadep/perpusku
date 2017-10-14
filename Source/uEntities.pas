@@ -17,6 +17,19 @@ type
   TInOut = (tsIn, tsOut);
 
   [Entity, AutoMapping]
+  [Id('FId', TIdGenerator.None)]
+  TSetting = class
+  strict private
+    FId: Integer;
+    FKeterangan: String;
+    FNilai: String;
+  public
+    property Id: Integer read FId write FId;
+    property Keterangan: String read FKeterangan write FKeterangan;
+    property Nilai: String read FNilai write FNilai;
+  end;
+
+  [Entity, AutoMapping]
   [UniqueKey('Kode')]
   TPengguna = class
   strict private
@@ -244,6 +257,7 @@ begin
 end;
 
 initialization
+  RegisterEntity(TSetting);
   RegisterEntity(TPengguna);
   RegisterEntity(TBuku);
   RegisterEntity(TAnggota);
