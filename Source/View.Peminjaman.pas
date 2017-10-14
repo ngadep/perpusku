@@ -153,10 +153,10 @@ end;
 const
   sTransactionSaved = 'Transaksi Peminjaman Berhasil Disimpan';
   sCannotBorrow = 'Tidak Bisa Pinjam Karena Melebihi Maximal Peminjaman';
-  sBookNotFound = 'Buku dengan Kode/ISBN: %s Tidak dapat ditemukan';
-  sMemberNotFOund = 'Data Anggota dengan Kode: %s Tidak dapat ditemukan';
-  sBookOnList = 'Buku dengan Judul: %s' + sLineBreak + 'Sudah Ada pada Daftar';
-  sBorrowedBook = 'Buku dengan Judul: %s' + sLineBreak + 'Sudah Dipinjam oleh: %s';
+  sBookNotFound = 'Buku dengan Kode/ISBN: "%s" Tidak dapat ditemukan';
+  sMemberNotFOund = 'Data Anggota dengan Kode: "%s" Tidak dapat ditemukan';
+  sBookOnList = 'Buku dengan Judul: "%s"' + sLineBreak + 'Sudah Ada pada Daftar';
+  sBorrowedBook = 'Buku dengan Judul: "%s"' + sLineBreak + 'Sudah Dipinjam oleh: %s';
 
 { TFrmPeminjaman }
 
@@ -257,18 +257,26 @@ begin
       TambahBuku(LBuku);
     end else
     begin
-      raise Exception.Create(sBookNotFOund);
+      raise Exception.Create(Format(sBookNotFOund, [LKodeBuku]));
     end;
   end;
 end;
 
 procedure TFrmPeminjaman.EdKodeKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
+var
+  LKodeAnggota: string;
 begin
   if Key = VK_RETURN then
   begin
+    LKodeAnggota := EdKode.Text;
+    EdKode.Clear;
+
+    if LKodeAnggota = EmptyStr then
+      Exit;
+
     FAnggota := FManager.Find<TAnggota>
-      .Where(Linq['Kode'] = EdKode.Text)
+      .Where(Linq['Kode'] = LKodeAnggota)
       .UniqueResult;
 
     if Assigned(FAnggota) then
@@ -277,7 +285,7 @@ begin
     end else
     begin
       ClearAnggota;
-      raise Exception.Create(sMemberNotFOund);
+      raise Exception.Create(Format(sMemberNotFOund, [LKodeAnggota]));
     end;
   end;
 end;
