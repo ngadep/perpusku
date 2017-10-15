@@ -93,6 +93,7 @@ type
     procedure LoadAnggota(AAnggota: TAnggota);
     procedure TambahBuku(ABuku: TBuku);
     function TidakBisaPinjam: Boolean;
+    function LoadSetting(AId: integer; ADefault: string = ''): string;
     { Private declarations }
   public
     { Public declarations }
@@ -335,11 +336,22 @@ begin
   EdKode.Clear;
 end;
 
+function TFrmPeminjaman.LoadSetting(AId: integer; ADefault: string): string;
+var
+  LSetting: TSetting;
+begin
+  LSetting := FManager.Find<TSetting>(AId);
+  if LSetting = nil then
+    Result := ADefault else
+    Result := LSetting.Nilai;
+end;
+
 procedure TFrmPeminjaman.LoadTempoDanDenda;
 begin
-  // sementara FTEmpo dan FDenda manual nanti load dari database.
-  FTempo := 7;
-  FDenda := 1000;
+  // Load Setting Tempo Peminjaman Default 7 Hari
+  FTempo := StrToInt(LoadSetting(1, '7'));
+  // Load Setting Denda per Hari Default 1000
+  FDenda := StrToInt(LoadSetting(2, '1000'));
 
   LbTempo.Caption := IntToStr(FTempo) + ' Hari';
   LbDenda.Caption := 'Rp. ' + IntToStr(FDenda);
@@ -366,7 +378,7 @@ begin
       raise Exception.Create(Format(sBookOnList, [ABuku.Judul]));
     end;
   end;
-  
+
   LBukuIniTerpinjam := FManager.Find<TPinjam>
     .Select(Linq['Id'].Count)
     .Where(
@@ -379,7 +391,7 @@ begin
 
   if (LBukuIniTerpinjam > 0) then
     raise Exception.Create(Format(sBorrowedBook, [ABuku.Judul, FAnggota.Nama]));
-      
+
   LPinjam := TPinjam.Create(FAnggota, ABuku, Now, FTempo, FDenda);
   FPinjams.Add(LPinjam);
   FPinjamDataSource.DataChanged;
