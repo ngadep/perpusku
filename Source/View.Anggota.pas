@@ -93,7 +93,7 @@ begin
   if Form.ShowModal = mrOk then
   begin
     FManager.Save(Form.Anggota);
-    DSetDaftar.Refresh;
+    Segarkan;
   end;
 end;
 

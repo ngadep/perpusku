@@ -101,7 +101,7 @@ begin
   if Form.ShowModal = mrOk then
   begin
     FManager.Save(Form.Buku);
-    DSetDaftar.Refresh;
+    Segarkan;
   end;
 end;
 
