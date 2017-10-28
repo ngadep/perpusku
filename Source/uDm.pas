@@ -5,9 +5,15 @@ interface
 uses
   Aurelius.Engine.DatabaseManager,
   Aurelius.Drivers.Interfaces,
+{$IFDEF MYSQLDB}
+  Aurelius.SQL.MySQL,
+  Aurelius.Schema.MySQL,
+  Aurelius.Drivers.MyDac,
+{$ELSE}
   Aurelius.SQL.SQLite,
   Aurelius.Schema.SQLite,
   Aurelius.Drivers.SQLite,
+{$ENDIF}
   Aurelius.Schema.Messages,
   System.SysUtils,
   System.Classes;
@@ -31,6 +37,9 @@ implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 uses
+{$IFDEF MYSQLDB}
+  MyAccess,
+{$ENDIF}
   Aurelius.Drivers.Base;
 
 {$R *.dfm}
@@ -38,8 +47,17 @@ uses
 { TMyConnectionModule }
 
 class function TDm.CreateConnection: IDBConnection;
+{$IFDEF MYSQLDB}
+var
+  LConnection : TMyConnection;
+{$ENDIF}
 begin
-//  Result := TSQLiteNativeConnectionAdapter.Create(ParamStr(0) + '.db');
+{$IFDEF MYSQLDB}
+  LConnection := TMyConnection.Create(nil);
+  LCOnnection.ConnectString := 'User ID=root;Password=server;Data Source=localhost;Database=aurelius;Login Prompt=False';
+  Result := TMyDacConnectionAdapter.Create(LConnection);
+{$ENDIF}
+
   Result := TSQLiteNativeConnectionAdapter.Create('perpus.db');
 end;
 
