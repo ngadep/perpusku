@@ -223,12 +223,12 @@ end;
 
 function TPinjam.GetTransaksiIn: TTransaksi;
 begin
-  FTransaksiIn.Value;
+  Result := FTransaksiIn.Value;
 end;
 
 function TPinjam.GetTransaksiOut: TTransaksi;
 begin
-  FTransaksiOut.Value;
+  Result := FTransaksiOut.Value;
 end;
 
 procedure TPinjam.SetTransaksiIn(const Value: TTransaksi);
@@ -253,7 +253,7 @@ constructor TTransaksi.Create(AAnggota: TAnggota; ATanggal: TDateTime;
 begin
   FAnggota := AAnggota;
   FTanggal := ATanggal;
-  AJenis := AJenis;
+  FJenis := AJenis;
 end;
 
 initialization
