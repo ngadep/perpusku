@@ -24,7 +24,6 @@ type
   private
     FConnection: IDBConnection;
     class function CreateConnection: IDBConnection;
-    class function CreateFactory: IDBConnectionFactory;
   public
     property Connection: IDBConnection read FConnection;
   end;
@@ -59,16 +58,6 @@ begin
 {$ENDIF}
 
   Result := TSQLiteNativeConnectionAdapter.Create('perpus.db');
-end;
-
-class function TDm.CreateFactory: IDBConnectionFactory;
-begin
-  Result := TDBConnectionFactory.Create(
-    function: IDBConnection
-    begin
-      Result := CreateConnection;
-    end
-  );
 end;
 
 procedure TDm.DataModuleCreate(Sender: TObject);
